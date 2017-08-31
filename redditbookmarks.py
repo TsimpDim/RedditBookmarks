@@ -18,26 +18,49 @@ def main():
 
     saved = r_user.saved(limit=None)
 
-    #Open file
-    with open("struc.html") as fp:
-        soup = BeautifulSoup(fp, 'html.parser')
+    #Create file
+    f = open('RedditBookmarks.html', 'w')
 
 
+
+    soup = BeautifulSoup("<!DOCTYPE NETSCAPE-Bookmark-file-1>", "html.parser")
+    meta_tag = soup.new_tag('META')
+    meta_tag['HTTP-EQUIV'] = "Content-Type"
+    meta_tag['CONTENT'] = "text/html; charset=UTF-8"
+    soup.append(meta_tag)
+
+    title_tag = soup.new_tag('TITLE')
+    title_tag.string = "RedditBookmarks"
+    soup.append(title_tag)
+
+    header_tag = soup.new_tag('H1')
+    header_tag.string = "RedditSaved"
+    soup.append(header_tag)
+
+    dl_tag = soup.new_tag('DL')
+    dl_tag.append(soup.new_tag('p'))
+    soup.append(dl_tag)
+    soup.append(soup.new_tag('p'))
 
     tag = soup.find('p')
     for link in saved:
+        new_tag = soup.new_tag('DT')
+
         if isinstance(link, Submission):
-            new_tag = soup.new_tag('DT')
             content = soup.new_tag('A', HREF=link.url)
             content.string = link.title.strip()
-            new_tag.append(content)
-            tag.append(new_tag)
+        else:
+            content = soup.new_tag('A', HREF=link.submission.url)
+            content.string = link.id
+
+
+        new_tag.append(content)
+        tag.append(new_tag)
 
 
 
     #Save file
-    with open("output.html", "w") as file:
-        file.write(str(soup).replace("</DT>", "\n").replace("</p>", " "))
+    f.write(str(soup).replace("</DT>", "\n").replace("</p>", " "))
 
 if __name__ == "__main__":
     main()
