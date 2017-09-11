@@ -4,7 +4,8 @@ from bs4 import BeautifulSoup
 
 
 def authenticate():
-    '''Authenticate using praw.ini'''
+    '''Login as praw user'''
+
     reddit = praw.Reddit('RedditBookmarks', user_agent='Bookmark exporter v1.0')
     print("Authentication as {} successfull".format(reddit.user.me))
     return reddit
@@ -13,7 +14,7 @@ def authenticate():
 
 
 def main():
-    '''Build the HTML file'''
+    '''Builds HTML file'''
 
     #Login
     reddit = authenticate()
