@@ -3,7 +3,8 @@ from praw.models import Submission
 from bs4 import BeautifulSoup
 
 
-def Authenticate():
+def authenticate():
+    '''Authenticate using praw.ini'''
     reddit = praw.Reddit('RedditBookmarks', user_agent='Bookmark exporter v1.0')
     print("Authentication as {} successfull".format(reddit.user.me))
     return reddit
@@ -12,14 +13,16 @@ def Authenticate():
 
 
 def main():
+    '''Build the HTML file'''
+
     #Login
-    reddit = Authenticate()
+    reddit = authenticate()
     r_user = reddit.user.me()
 
     saved = r_user.saved(limit=None)
 
     #Create file
-    f = open('RedditBookmarks.html', 'w')
+    html_file = open('RedditBookmarks.html', 'w')
 
 
 
@@ -60,7 +63,7 @@ def main():
 
 
     #Save file
-    f.write(str(soup).replace("</DT>", "\n").replace("</p>", " "))
+    html_file.write(str(soup).replace("</DT>", "\n").replace("</p>", " "))
 
 if __name__ == "__main__":
     main()
